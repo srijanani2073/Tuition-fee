@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Tax Calculator</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f7fa; margin: 0; padding: 0;">
+
+  <div style="max-width: 600px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    <h1 style="text-align: center; color: #333;">Employee Tax Calculator</h1>
+
+    <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center;">
+      <label style="font-weight: bold; margin-right: 10px;">Enter Basic Pay: </label>
+      <input id="basicPay" type="number" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 150px;">
+      <button onclick="calculateSalary()" style="margin-left: 10px; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Calculate Salary</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <h2>Salary Details</h2>
+      <p>Basic Pay: <span id="displayBasicPay">0</span></p>
+      <p>DA (30%): <span id="da">0</span></p>
+      <p>HRA (10%): <span id="hra">0</span></p>
+      <p>Special Allowance (5%): <span id="specialAllowance">0</span></p>
+      <p><strong>Total Salary: <span id="totalSalary">0</span></strong></p>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <button onclick="checkGrade()" style="margin-left: 0; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Check Grade</button>
+      <p>Employee Grade: <strong><span id="grade">-</span></strong></p>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <button onclick="checkBonus()" style="margin-left: 0; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Check Bonus</button>
+      <p>Bonus: <strong><span id="bonus">0</span></strong></p>
+    </div>
+  </div>
+
+  <script>
+    let totalSalary = 0;
+    let grade = '';
+    let basicPay = 0;
+
+    function calculateSalary() {
+      basicPay = parseFloat(document.getElementById('basicPay').value);
+      if (isNaN(basicPay) || basicPay <= 0) {
+        alert("Enter salary other than 0!!");
+        return;
+      }
+
+      const daVal = 0.3 * basicPay;
+      const hraVal = 0.1 * basicPay;
+      const saVal = 0.05 * basicPay;
+      totalSalary = basicPay + daVal + hraVal + saVal;
+
+      document.getElementById('displayBasicPay').textContent = basicPay.toFixed(2);
+      document.getElementById('da').textContent = daVal.toFixed(2);
+      document.getElementById('hra').textContent = hraVal.toFixed(2);
+      document.getElementById('specialAllowance').textContent = saVal.toFixed(2);
+      document.getElementById('totalSalary').textContent = totalSalary.toFixed(2);
+    }
+
+    function checkGrade() {
+      if (totalSalary >= 10000 && totalSalary <= 20000) grade = "A";
+      else if (totalSalary >= 20001 && totalSalary <= 30000) grade = "B";
+      else if (totalSalary >= 30001 && totalSalary <= 40000) grade = "C";
+      else if (totalSalary > 40000) grade = "EXC";
+      else grade = "Not eligible";
+
+      document.getElementById('grade').textContent = grade;
+    }
+
+    function checkBonus() {
+      let b = 0;
+      if (grade === "A") b = 0.15 * basicPay;
+      else if (grade === "B") b = 0.12 * basicPay;
+      else if (grade === "C") b = 0.06 * basicPay;
+      else if (grade === "EXC") b = 0.05 * basicPay;
+
+      document.getElementById('bonus').textContent = b.toFixed(2);
+    }
+  </script>
+</body>
+</html>
