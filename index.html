@@ -3,82 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Tax Calculator</title>
+  <title>Fees Bill Calculator</title>
+  <!-- React + ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f5f7fa; margin: 0; padding: 0;">
+<body>
+  <div id="root"></div>
 
-  <div style="max-width: 600px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-    <h1 style="text-align: center; color: #333;">Employee Tax Calculator</h1>
+  <script type="text/babel">
 
-    <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center;">
-      <label style="font-weight: bold; margin-right: 10px;">Enter Basic Pay: </label>
-      <input id="basicPay" type="number" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 150px;">
-      <button onclick="calculateSalary()" style="margin-left: 10px; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Calculate Salary</button>
-    </div>
+    const { useState } = React;
 
-    <div style="margin-top: 20px;">
-      <h2>Salary Details</h2>
-      <p>Basic Pay: <span id="displayBasicPay">0</span></p>
-      <p>DA (30%): <span id="da">0</span></p>
-      <p>HRA (10%): <span id="hra">0</span></p>
-      <p>Special Allowance (5%): <span id="specialAllowance">0</span></p>
-      <p><strong>Total Salary: <span id="totalSalary">0</span></strong></p>
-    </div>
+    // FeeForm Component
+    function FeeForm({ formData, onInputChange }) {
+      return (
+        <div style={{ 
+          background: 'white', 
+          padding: '30px', 
+          borderRadius: '12px', 
+          marginBottom: '24px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          border: '1px solid #e0e0e0'
+        }}>
+          <h2 style={{ 
+            marginTop: 0, 
+            marginBottom: '24px',
+            color: '#1a237e',
+            fontSize: '22px',
+            fontWeight: '600',
+            borderBottom: '2px solid #3f51b5',
+            paddingBottom: '12px'
+          }}>Enter Fee Details</h2>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', color: '#424242', fontSize: '14px', fontWeight: '500' }}>
+              Tuition Fee (₹)
+              <input
+                type="number"
+                name="tuitionFee"
+                value={formData.tuitionFee}
+                onChange={(e) => onInputChange(e.target)}
+                style={{ width: '100%', padding: '12px 16px', marginTop: '8px', border: '1px solid #d0d0d0', borderRadius: '6px', fontSize: '15px' }}
+              />
+            </label>
+          </div>
 
-    <div style="margin-top: 20px;">
-      <button onclick="checkGrade()" style="margin-left: 0; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Check Grade</button>
-      <p>Employee Grade: <strong><span id="grade">-</span></strong></p>
-    </div>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', color: '#424242', fontSize: '14px', fontWeight: '500' }}>
+              Standard of Study
+              <input
+                type="number"
+                name="standard"
+                value={formData.standard}
+                onChange={(e) => onInputChange(e.target)}
+                style={{ width: '100%', padding: '12px 16px', marginTop: '8px', border: '1px solid #d0d0d0', borderRadius: '6px', fontSize: '15px' }}
+              />
+            </label>
+          </div>
 
-    <div style="margin-top: 20px;">
-      <button onclick="checkBonus()" style="margin-left: 0; padding: 8px 15px; background-color: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold;">Check Bonus</button>
-      <p>Bonus: <strong><span id="bonus">0</span></strong></p>
-    </div>
-  </div>
-
-  <script>
-    let totalSalary = 0;
-    let grade = '';
-    let basicPay = 0;
-
-    function calculateSalary() {
-      basicPay = parseFloat(document.getElementById('basicPay').value);
-      if (isNaN(basicPay) || basicPay <= 0) {
-        alert("Enter salary other than 0!!");
-        return;
-      }
-
-      const daVal = 0.3 * basicPay;
-      const hraVal = 0.1 * basicPay;
-      const saVal = 0.05 * basicPay;
-      totalSalary = basicPay + daVal + hraVal + saVal;
-
-      document.getElementById('displayBasicPay').textContent = basicPay.toFixed(2);
-      document.getElementById('da').textContent = daVal.toFixed(2);
-      document.getElementById('hra').textContent = hraVal.toFixed(2);
-      document.getElementById('specialAllowance').textContent = saVal.toFixed(2);
-      document.getElementById('totalSalary').textContent = totalSalary.toFixed(2);
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', color: '#424242', fontSize: '14px', fontWeight: '500' }}>
+                Date of Payment
+                <input
+                  type="date"
+                  name="dateOfPayment"
+                  value={formData.dateOfPayment}
+                  onChange={(e) => onInputChange(e.target)}
+                  style={{ width: '100%', padding: '12px 16px', marginTop: '8px', border: '1px solid #d0d0d0', borderRadius: '6px', fontSize: '15px' }}
+                />
+              </label>
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', color: '#424242', fontSize: '14px', fontWeight: '500' }}>
+                Last Date of Payment
+                <input
+                  type="date"
+                  name="lastDateOfPayment"
+                  value={formData.lastDateOfPayment}
+                  onChange={(e) => onInputChange(e.target)}
+                  style={{ width: '100%', padding: '12px 16px', marginTop: '8px', border: '1px solid #d0d0d0', borderRadius: '6px', fontSize: '15px' }}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      );
     }
 
-    function checkGrade() {
-      if (totalSalary >= 10000 && totalSalary <= 20000) grade = "A";
-      else if (totalSalary >= 20001 && totalSalary <= 30000) grade = "B";
-      else if (totalSalary >= 30001 && totalSalary <= 40000) grade = "C";
-      else if (totalSalary > 40000) grade = "EXC";
-      else grade = "Not eligible";
-
-      document.getElementById('grade').textContent = grade;
+    // FeeDisplay Component
+    function FeeDisplay({ fees }) {
+      return (
+        <div style={{ 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          padding: '30px', 
+          borderRadius: '12px', 
+          marginBottom: '24px',
+          boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+          color: 'white'
+        }}>
+          <h2 style={{ marginTop: 0, marginBottom: '24px', fontSize: '22px', fontWeight: '600' }}>Fee Breakdown</h2>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <tbody>
+              <tr><td>Tuition Fee</td><td style={{ textAlign: 'right' }}>₹ {fees.tuitionFee.toFixed(2)}</td></tr>
+              <tr><td>Hostel Fee</td><td style={{ textAlign: 'right' }}>₹ {fees.hostelFee.toFixed(2)}</td></tr>
+              <tr><td>Dress Fee</td><td style={{ textAlign: 'right' }}>₹ {fees.dressFee.toFixed(2)}</td></tr>
+              <tr><td>Activity Fee (10%)</td><td style={{ textAlign: 'right' }}>₹ {fees.activityFee.toFixed(2)}</td></tr>
+              <tr><td><strong>Total Fee</strong></td><td style={{ textAlign: 'right', fontWeight: '700' }}>₹ {fees.totalFee.toFixed(2)}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      );
     }
 
-    function checkBonus() {
-      let b = 0;
-      if (grade === "A") b = 0.15 * basicPay;
-      else if (grade === "B") b = 0.12 * basicPay;
-      else if (grade === "C") b = 0.06 * basicPay;
-      else if (grade === "EXC") b = 0.05 * basicPay;
-
-      document.getElementById('bonus').textContent = b.toFixed(2);
+    // DiscountCalculator Component
+    function DiscountCalculator({ onCheckDiscount, discount }) {
+      return (
+        <div style={{ background: 'white', padding: '30px', borderRadius: '12px', marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: '1px solid #e0e0e0' }}>
+          <h2>Discount Calculation</h2>
+          <button onClick={onCheckDiscount}>Check Discount</button>
+          {discount && <div>
+            <p>Discount: {discount.percentage}%</p>
+            <p>Amount: ₹ {discount.discountAmount.toFixed(2)}</p>
+            <p>Total after discount: ₹ {discount.totalAfterDiscount.toFixed(2)}</p>
+          </div>}
+        </div>
+      );
     }
+
+    // PaymentChecker Component
+    function PaymentChecker({ onCheckPayment, payment }) {
+      return (
+        <div style={{ background: 'white', padding: '30px', borderRadius: '12px', marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: '1px solid #e0e0e0' }}>
+          <h2>Payment Check</h2>
+          <button onClick={onCheckPayment}>Check Payment</button>
+          {payment && <div>
+            <p>Days Late: {payment.daysDifference}</p>
+            <p>Fine Percentage: {payment.finePercentage}%</p>
+            <p>Fine Amount: ₹ {payment.fineAmount.toFixed(2)}</p>
+            <p>Total Bill: ₹ {payment.totalBill.toFixed(2)}</p>
+            <p>Total to be Paid: ₹ {payment.totalToBePaid.toFixed(2)}</p>
+          </div>}
+        </div>
+      );
+    }
+
+    // Main App
+    function App() {
+      const [formData, setFormData] = useState({ tuitionFee: '', dateOfPayment: '', lastDateOfPayment: '', standard: '' });
+      const [fees, setFees] = useState({ tuitionFee: 0, hostelFee: 0, dressFee: 0, activityFee: 0, totalFee: 0 });
+      const [discount, setDiscount] = useState(null);
+      const [payment, setPayment] = useState(null);
+
+      const handleInputChange = (e) => {
+        const { name, value } = e;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        calculateFees({ ...formData, [name]: value });
+      };
+
+      const calculateFees = (data) => {
+        const tuition = parseFloat(data.tuitionFee) || 0;
+        const std = parseInt(data.standard) || 0;
+        let hostel = 0, dress = 0;
+        if (std >= 1 && std <= 3) { dress=3000; hostel=5000; } 
+        else if (std >=4 && std <=6){ dress=5000; hostel=8000;} 
+        else if (std>6){ dress=10000; hostel=10000;}
+        const activity = tuition*0.10;
+        const total = tuition+hostel+dress+activity;
+        setFees({ tuitionFee: tuition, hostelFee: hostel, dressFee: dress, activityFee: activity, totalFee: total });
+      };
+
+      const handleCheckDiscount = () => {
+        let percentage=0;
+        const total=fees.totalFee;
+        if(total>=1000 && total<=4000) percentage=5;
+        else if(total>=4001 && total<=6000) percentage=12;
+        else if(total>=6001 && total<=8000) percentage=17;
+        else if(total>=8001 && total<=40000) percentage=21;
+        const discountAmount=(total*percentage)/100;
+        setDiscount({ percentage, discountAmount, totalAfterDiscount: total-discountAmount });
+      };
+
+      const handleCheckPayment = () => {
+        const paymentDate = new Date(formData.dateOfPayment);
+        const lastDate = new Date(formData.lastDateOfPayment);
+        const diffDays=Math.ceil(Math.abs(paymentDate-lastDate)/(1000*60*60*24));
+        let finePercentage=0;
+        if(diffDays<30) finePercentage=6;
+        else if(diffDays<=60) finePercentage=12;
+        else finePercentage=21;
+        const totalBill=discount ? discount.totalAfterDiscount : fees.totalFee;
+        const fineAmount=(totalBill*finePercentage)/100;
+        setPayment({ daysDifference: diffDays, finePercentage, fineAmount, totalBill, totalToBePaid: totalBill+fineAmount });
+      };
+
+      return (
+        <div style={{ maxWidth: '900px', margin: '40px auto' }}>
+          <h1 style={{ textAlign: 'center' }}>Fees Bill Calculator</h1>
+          <FeeForm formData={formData} onInputChange={handleInputChange} />
+          <FeeDisplay fees={fees} />
+          <DiscountCalculator onCheckDiscount={handleCheckDiscount} discount={discount} />
+          <PaymentChecker onCheckPayment={handleCheckPayment} payment={payment} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
   </script>
 </body>
 </html>
